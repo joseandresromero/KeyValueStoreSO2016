@@ -1,26 +1,28 @@
-package programa_servidor;
+package libreria_cliente;
 
 import java.io.*;
 import java.net.*;
-import libreria_cliente.Comando;
-import libreria_cliente.Respuesta;
  
-public class ClienteTest {
-    
-    public static void main (String[] args) {
-        Socket cliente = null;
-        ObjectInputStream entrada = null;
-        ObjectOutputStream salida = null;
-        
-        String ipServidor = args[0];
-        
+public class LibreriaCliente {
+
+    private Socket cliente;
+    private DataInputStream entrada;
+    private DataOutputStream salida;
+
+    private String ipServidor;
+    private int puerto;
+
+    public LibreriaCliente(String ipServidor, int puerto) {
+        this.ipServidor = ipServidor;
+        this.puerto = puerto;
+
         try {
 
-            cliente = new Socket(ipServidor, Integer.parseInt(args[1]));
+            cliente = new Socket(ipServidor, puerto);
             //asignamos este numero de puerto
-            entrada = new ObjectInputStream(cliente.getInputStream());
+            entrada = new DataInputStream(cliente.getInputStream());
             // será lo que enviaremos al servidor       
-            salida = new ObjectOutputStream(cliente.getOutputStream());
+            salida = new DataOutputStream(cliente.getOutputStream());
             // será lo que nos devuelva el servidor     
 
         } catch (UnknownHostException excepcion) {
@@ -28,12 +30,14 @@ public class ClienteTest {
         } catch (Exception e) {
             System.err.println("Error: " + e );
         }
-        
+    }
+
+    public String ejecutarComando(Comando comando) {
         try {
-            Respuesta respuesta;
-            salida.writeObject(new Comando("metodo get", "primero"));
-            respuesta = (Respuesta) entrada.readObject();
-            System.out.println("SERVIDOR DICE: " + respuesta.getRespuesta());
+            String linea_recibida;
+            salida.writeBytes("mi comando de prueba\n");
+            linea_recibida = entrada.readLine();
+            System.out.println("SERVIDOR DICE: " + linea_recibida);
             salida.close();
             entrada.close();
             cliente.close();
@@ -44,5 +48,7 @@ public class ClienteTest {
         } catch (Exception e) {
             System.err.println("Error: " + e );
         }
+
+        return null;
     }
 }

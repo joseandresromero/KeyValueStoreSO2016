@@ -1,6 +1,9 @@
 package libreria_cliente;
 
-public class Comando {
+import java.io.*;
+import java.net.*;
+
+public class Comando implements Serializable { 
 
     private String metodo;
     private String parametro1;

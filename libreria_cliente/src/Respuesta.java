@@ -1,6 +1,9 @@
 package libreria_cliente;
 
-public class Respuesta {
+import java.io.*;
+import java.net.*;
+
+public class Respuesta implements Serializable {
 
     private boolean success;
     private Object respuesta;
