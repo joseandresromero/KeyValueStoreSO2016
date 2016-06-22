@@ -37,9 +37,10 @@ class ClientWorker implements Runnable {
       System.exit(-1);
     }
 
-    while(true){
+//    while(true){
       try{
         line = in.readLine();
+        System.out.println("Linea recibida del cliente: " + line);
 //Send data back to client
         out.println(line);
 /*
@@ -54,6 +55,6 @@ class ClientWorker implements Runnable {
         System.out.println("Execp >>>>>> " + e);
         System.exit(-1);
        }
-    }
+//    }
   }
 }
