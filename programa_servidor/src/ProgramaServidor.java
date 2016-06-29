@@ -6,13 +6,16 @@ import java.net.*;
 public class ProgramaServidor {
     public static void main (String[] args) {
         ServerSocket servidor = null;        
-
+	KeyValueStore store = null;
         int puerto = Integer.parseInt(args[0]);
 
         try {
             servidor = new ServerSocket(puerto);
 
             System.out.println("Servidor corriendo...");
+
+	    //Instancio el key value store
+	    store = new KeyValueStore();
 /*
             while(true) {
                 Socket socket_conectado = servidor.accept();
@@ -34,7 +37,7 @@ public class ProgramaServidor {
             ClientWorker w;
             try{
         //server.accept returns a client connection
-              w = new ClientWorker(servidor.accept());
+              w = new ClientWorker(servidor.accept(), store);
               Thread t = new Thread(w);
               t.start();
             } catch (IOException e) {

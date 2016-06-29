@@ -7,10 +7,12 @@ import libreria_cliente.Respuesta;
 
 class ClientWorker implements Runnable {
   private Socket cliente;
+  private KeyValueStore store;
 
 //Constructor
-  ClientWorker(Socket cliente) {
+  ClientWorker(Socket cliente, KeyValueStore store) {
     this.cliente = cliente;
+    this.store = store;
   }
 
   public void run(){
@@ -41,6 +43,10 @@ class ClientWorker implements Runnable {
       try{
         line = in.readLine();
         System.out.println("Linea recibida del cliente: " + line);
+
+	CommandExecuter.executeCommand(line, store);
+
+
 //Send data back to client
         out.println(line);
 /*
