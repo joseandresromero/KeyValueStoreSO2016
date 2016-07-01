@@ -42,11 +42,12 @@ public class ClienteTest {
         
 ////        while(true) {
             try {
-                Scanner scanIn = new Scanner(System.in);
-                String userInput = scanIn.nextLine();
-
-////                salida = new PrintWriter(cliente.getOutputStream(), true);
-////                entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+////                Scanner scanIn = new Scanner(System.in);
+////                String userInput = scanIn.nextLine();
+		BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+		String userInput = inFromUser.readLine();
+                salida = new PrintWriter(cliente.getOutputStream(), true);
+                entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 
                 salida.println(userInput);
 

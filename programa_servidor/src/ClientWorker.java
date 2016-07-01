@@ -5,14 +5,24 @@ import java.net.*;
 import libreria_cliente.Comando;
 import libreria_cliente.Respuesta;
 
-class ClientWorker implements Runnable {
+public class ClientWorker implements Runnable {
   private Socket cliente;
   private KeyValueStore store;
 
-//Constructor
+//Constructores
+
+  ClientWorker(KeyValueStore store) {
+    this.store = store;
+    this.cliente = null;
+  }
+
   ClientWorker(Socket cliente, KeyValueStore store) {
     this.cliente = cliente;
     this.store = store;
+  }
+
+  public void setCliente(Socket cliente) {
+    this.cliente = cliente;
   }
 
   public void run(){

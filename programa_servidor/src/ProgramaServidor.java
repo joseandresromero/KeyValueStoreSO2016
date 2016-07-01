@@ -7,6 +7,7 @@ public class ProgramaServidor {
     public static void main (String[] args) {
         ServerSocket servidor = null;        
 	KeyValueStore store = null;
+	ThreadPool pool = null;
         int puerto = Integer.parseInt(args[0]);
 
         try {
@@ -16,6 +17,8 @@ public class ProgramaServidor {
 
 	    //Instancio el key value store
 	    store = new KeyValueStore();
+
+	    pool = new ThreadPool(5);
 /*
             while(true) {
                 Socket socket_conectado = servidor.accept();
@@ -38,12 +41,15 @@ public class ProgramaServidor {
             try{
         //server.accept returns a client connection
               w = new ClientWorker(servidor.accept(), store);
-              Thread t = new Thread(w);
-              t.start();
+              //Thread t = new Thread(w);
+              //t.start();
+	      pool.execute(w);
             } catch (IOException e) {
               System.out.println("Accept failed: 4444");
               System.exit(-1);
-            }
+            } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
           }
     }
 }
