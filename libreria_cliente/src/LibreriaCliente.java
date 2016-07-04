@@ -27,7 +27,7 @@ public class LibreriaCliente {
 
         } catch (UnknownHostException excepcion) {
             System.err.println("El servidor no está levantado");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Error: " + e );
         }
     }
