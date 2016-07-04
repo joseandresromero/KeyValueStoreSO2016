@@ -12,6 +12,8 @@ public class CommandExecuter {
 	}
 */
 	public static String executeCommand(String command, KeyValueStore store) {
+		String response = null;
+
 		System.out.println("Comando: " + command);
 		String[] commandDecoded = decodeCommand(command);
 		System.out.println("metodo: " + commandDecoded[0]);
@@ -20,10 +22,18 @@ public class CommandExecuter {
 
 		if ("set".equals(commandDecoded[0])) {
 			store.set(commandDecoded[1], commandDecoded[2]);
+			response = "OK";
 		} else if ("get".equals(commandDecoded[0])) {
 			System.out.println("El valor es: " + store.get(commandDecoded[1]));
+			response = store.get(commandDecoded[1]);
+		} else if ("list".equals(commandDecoded[0])) {
+			response = "";
+			for (String key : store.list()) {
+				System.out.println("val: "+key);
+				response = response + key + " ";	
+			}
 		}
-		return null;
+		return response;
 	}
 
 	private static String[] decodeCommand(String command) {
@@ -32,17 +42,22 @@ public class CommandExecuter {
 		String parametro2 = null;
 
 		int indiceDelimitadorMetodo = command.indexOf(' ');
-		metodo = command.substring(0, indiceDelimitadorMetodo);
 
-		String comandoRestante = command.substring(indiceDelimitadorMetodo + 1);
-
-		int indiceDelimitadorParametros = comandoRestante.indexOf(' ');
-
-		if (indiceDelimitadorParametros == -1) {
-			parametro1 = comandoRestante;
+		if (indiceDelimitadorMetodo == -1) {
+			metodo = command;
 		} else {
-			parametro1 = comandoRestante.substring(0, indiceDelimitadorParametros);
-			parametro2 = comandoRestante.substring(indiceDelimitadorParametros + 1);
+			metodo = command.substring(0, indiceDelimitadorMetodo);
+
+			String comandoRestante = command.substring(indiceDelimitadorMetodo + 1);
+
+	                int indiceDelimitadorParametros = comandoRestante.indexOf(' ');
+
+	                if (indiceDelimitadorParametros == -1) {
+	                        parametro1 = comandoRestante;
+	                } else {
+	                        parametro1 = comandoRestante.substring(0, indiceDelimitadorParametros);
+	                        parametro2 = comandoRestante.substring(indiceDelimitadorParametros + 1);
+	                }
 		}
 
 		String[] commandDecoded = {metodo, parametro1, parametro2};
