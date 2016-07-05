@@ -19,4 +19,8 @@ public class KeyValueStore {
 	public synchronized String get(String key) {
 		return store.get(key);
 	}
+
+	public synchronized Set<String> list() {
+		return store.keySet();
+	}
 }

@@ -54,11 +54,11 @@ public class ClientWorker implements Runnable {
         line = in.readLine();
         System.out.println("Linea recibida del cliente: " + line);
 
-	CommandExecuter.executeCommand(line, store);
+	String response = CommandExecuter.executeCommand(line, store);
 
 
 //Send data back to client
-        out.println(line);
+        out.println(response);
 /*
         	Comando comando = (Comando) in.readObject();
             System.out.println("Comando recibido del cliente: " + comando.getMetodo());
