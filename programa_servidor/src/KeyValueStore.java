@@ -23,4 +23,9 @@ public class KeyValueStore {
 	public synchronized Set<String> list() {
 		return store.keySet();
 	}
+
+	public synchronized void del(String key) {
+                store.remove(key);
+        }
+
 }

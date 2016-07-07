@@ -33,7 +33,10 @@ public class CommandExecuter {
 				System.out.println("val: "+key);
 				response = response + key + " ";	
 			}
-		}
+		} else if ("del".equals(commandDecoded[0])) {
+			store.del(commandDecoded[1]);
+                        response = "OK";
+		}	
 		return response;
 	}
 
