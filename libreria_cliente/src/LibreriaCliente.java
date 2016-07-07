@@ -32,7 +32,7 @@ public class LibreriaCliente {
     }
 
     public void leerComando(){
-
+	
         BufferedReader user = new BufferedReader( new InputStreamReader(System.in));		     
 
 	if ( cliente != null && os != null && is != null) {
@@ -50,6 +50,9 @@ public class LibreriaCliente {
 		    	ayuda();
 		    else if ( validarEntrada(userInput) ){
 		    
+			if ( contarPalabras( userInput ) >= 2 )
+			    userInput = validarParametros( userInput, contarPalabras( userInput ) );
+			
 		    	os.println(userInput);
 	  	    	responseLine = is.readLine();
 			
@@ -87,29 +90,69 @@ public class LibreriaCliente {
 
 	    switch(metodo){
 		case "LIST": return true;
-		    //break;
 		case "EXIT": return false;
-		    //break;
 		case "HELP": return false;
-		    //break;
 	    }	   
 
 	} else if (indDelimitMet != -1)  {
-	    metodo = command.substring(0, indDelimitMet).toUpperCase();
+	    metodo = command.substring(0, indDelimitMet).toUpperCase();    
 	    
 	    switch(metodo){
 		case "GET": return true;
-		    //break;
 		case "SET": return true;
-		    //break;
 		case "DEL": return true;
-		    //break;
 	    }
 	}
 	return false;
     }
 
-    
+
+    public String validarParametros( String command, int numParmts ){
+
+	int indDelimitMet = command.indexOf(' ');
+	String metodo = command.substring(0, indDelimitMet);
+	//System.err.println( metodo );
+	
+	String paramts = command.substring( indDelimitMet, command.length() );
+	paramts = paramts.trim();
+	//System.err.println( paramts );
+
+	if ( numParmts >= 3 ){
+	    int esp0 = paramts.indexOf(' ');
+	    //System.err.println( esp0 );
+
+	    int tamParamts = paramts.length();
+
+	    String paramt1 = paramts.substring(0,esp0);
+	    paramt1 = paramt1.trim();
+
+	    String paramt2 = paramts.substring( esp0, paramts.length() );
+	    paramt2 = paramt2.trim();
+
+	    //System.err.println( metodo + " " + paramt1 + " " + paramt2 );
+	    return metodo + " " + paramt1 + " " + paramt2;
+	}
+
+	//System.err.println( metodo + " " + paramts );
+	return metodo + " " + paramts;
+    }
+
+
+    public int contarPalabras( String cadena ){
+	StringTokenizer stTexto = new StringTokenizer(cadena);	
+	return stTexto.countTokens();
+    }
+
+
+    public void listar( String cadena ){
+    	StringTokenizer stTexto = new StringTokenizer( cadena );
+	
+	while( stTexto.hasMoreTokens() ){
+            System.out.println("Server: " + stTexto.nextToken().trim());
+    	}
+    }
+   
+
     public void ayuda(){
 	System.err.println("* get [key] \n** \t\tRetorna el valor asociado a dicha clave.");
 
@@ -128,18 +171,8 @@ public class LibreriaCliente {
 
 	System.err.println("* help \n** \t\tMuestra la lista de los comandos soportados, incluyendo "+
 				"\n** \t\tuna breve explicación de los mismos.");
-    }
-
+    } 
     
-    public void listar( String lista ){
-    	
-	StringTokenizer stTexto = new StringTokenizer(lista);
-	
-	while( stTexto.hasMoreTokens() ){
-            System.out.println("Server: " + stTexto.nextToken().trim());
-    	}
-    }
-
 }
 
 
