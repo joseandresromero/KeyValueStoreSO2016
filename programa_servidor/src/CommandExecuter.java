@@ -64,4 +64,8 @@ public class CommandExecuter {
 
 		return commandDecoded;
 	}
+
+	public static String test(String line) {
+		return line + "-jose";
+	}
 }
