@@ -6,14 +6,11 @@ import java.util.*;
  
 public class LibreriaCliente {
 
-    private DataInputStream entrada;
-    private DataOutputStream salida;
-
     private Socket cliente = null;
-    private PrintStream os = null;
-    private DataInputStream is = null;
 
     private String ipServidor;
+    private PrintStream os = null;
+    private DataInputStream is = null;
     private int puerto;
 
     public LibreriaCliente(String ipServidor, int puerto) {
@@ -22,10 +19,9 @@ public class LibreriaCliente {
         this.puerto = puerto;
 
         try {
-
-            cliente = new Socket(ipServidor, puerto);
-            os = new PrintStream(cliente.getOutputStream());
-            is = new DataInputStream(cliente.getInputStream());	     
+            cliente = new Socket(ipServidor, puerto);    
+	    os = new PrintStream(cliente.getOutputStream());
+            is = new DataInputStream(cliente.getInputStream());
 
         } catch (UnknownHostException excepcion) {
             System.err.println("ERROR: El servidor no está levantado");
@@ -36,7 +32,9 @@ public class LibreriaCliente {
     }
 
     public void leerComando(){
-	BufferedReader user = new BufferedReader( new InputStreamReader(System.in));
+
+        BufferedReader user = new BufferedReader( new InputStreamReader(System.in));		     
+
 	if ( cliente != null && os != null && is != null) {
 	    try{
 	    	String responseLine = "Leyendo";
@@ -46,19 +44,21 @@ public class LibreriaCliente {
 		    String userInput = user.readLine();
 		    
 		    if ( userInput.equalsIgnoreCase("exit") ){
+			System.out.println("cliente offLine");
 			break;
-                    } else if ( validarEntrada(userInput) ){
+		    } else if ( userInput.equalsIgnoreCase("help") )
+		    	ayuda();
+		    else if ( validarEntrada(userInput) ){
 		    
 		    	os.println(userInput);
 	  	    	responseLine = is.readLine();
+			
 			if (  userInput.equalsIgnoreCase("list")  )
                     	    listar(responseLine);
 			else    
 			    System.out.println("Server: " + responseLine);
                     
-		    }else if ( userInput.equalsIgnoreCase("help") )
-		    	ayuda();
-		    else
+		    } else
 			System.out.println("ERROR: Comando invalido.");	    
                 }
 		// clean up:
@@ -79,33 +79,30 @@ public class LibreriaCliente {
 
     public boolean validarEntrada(String command) {
 	
-	String metodo = null;
-	String parametro1 = null;
-	String parametro2 = null;
-
+	String metodo;
 	int indDelimitMet = command.indexOf(' ');
-
+	
 	if (indDelimitMet == -1) {
-	    metodo = command;
-	    //System.err.println(metodo);
+	    metodo = command.toUpperCase();
+
 	    switch(metodo){
-		case "list": return true;
+		case "LIST": return true;
 		    //break;
-		case "exit": return false;
+		case "EXIT": return false;
 		    //break;
-		case "help": return false;
+		case "HELP": return false;
 		    //break;
 	    }	   
 
 	} else if (indDelimitMet != -1)  {
-	    metodo = command.substring(0, indDelimitMet);
-	    //System.err.println(metodo);
+	    metodo = command.substring(0, indDelimitMet).toUpperCase();
+	    
 	    switch(metodo){
-		case "get": return true;
+		case "GET": return true;
 		    //break;
-		case "set": return true;
+		case "SET": return true;
 		    //break;
-		case "del": return true;
+		case "DEL": return true;
 		    //break;
 	    }
 	}
@@ -114,17 +111,23 @@ public class LibreriaCliente {
 
     
     public void ayuda(){
-	System.err.println("get key \n* Retorna el valor asociado a dicha clave.");
-	System.err.println("set key value \n* Almacena (en memoria) la clave, con el valor "+
-				"asociado. El valor puede contener cualquier caracter, incluso "+
-				"caracteres especiales, tabs y espaciones en blanco.");
-	System.err.println("del key \n* Elimina la clave, con su valor asociado.");
-	System.err.println("list \n* Retorna la lista de todas las claves almacenadas."+
-				" NO retorna los valores asociados a dichas claves.");
-	System.err.println("exit \n* Termina la conexión con el servidor y posteriormente, "+
-				"termina ejecución del programa cliente.");
-	System.err.println("help \n* Muestra la lista de los comandos soportados, incluyendo "+
-				"una breve explicación de los mismos.");
+	System.err.println("* get [key] \n** \t\tRetorna el valor asociado a dicha clave.");
+
+	System.err.println("* set [key] [value] \n** \t\tAlmacena (en memoria) la clave, con el valor "+
+				"\n** \t\tasociado. El valor puede contener cualquier "+
+				"\n** \t\tcaracter, incluso caracteres especiales, tabs "+
+				"\n** \t\ty espaciones en blanco.");
+
+	System.err.println("* del [key] \n** \t\tElimina la clave, con su valor asociado.");
+
+	System.err.println("* list \n** \t\tRetorna la lista de todas las claves almacenadas."+
+				"\n** \t\tNO retorna los valores asociados a dichas claves.");
+
+	System.err.println("* exit \n** \t\tTermina la conexión con el servidor y posteriormente, "+
+				"\n** \t\ttermina ejecución del programa cliente.");
+
+	System.err.println("* help \n** \t\tMuestra la lista de los comandos soportados, incluyendo "+
+				"\n** \t\tuna breve explicación de los mismos.");
     }
 
     
@@ -136,7 +139,10 @@ public class LibreriaCliente {
             System.out.println("Server: " + stTexto.nextToken().trim());
     	}
     }
+
 }
+
+
 /*
     public void ejecutarComando(Comando comando) {
 

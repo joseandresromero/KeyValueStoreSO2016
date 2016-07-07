@@ -20,20 +20,20 @@ public class CommandExecuter {
 		System.out.println("param1: " + commandDecoded[1]);
 		System.out.println("param2: " + commandDecoded[2]);
 
-		if ("set".equals(commandDecoded[0])) {
+		if ("set".equalsIgnoreCase(commandDecoded[0])) {
 			store.set(commandDecoded[1], commandDecoded[2]);
 			response = "OK";
-		} else if ("get".equals(commandDecoded[0])) {
+		} else if ("get".equalsIgnoreCase(commandDecoded[0])) {
 			System.out.println("El valor es: " + store.get(commandDecoded[1]));
-			response = store.get(commandDecoded[1]);
-			if( response == null )	response = "Key no existe";
-		} else if ("list".equals(commandDecoded[0])) {
+			response = "Key = "+store.get(commandDecoded[1]);
+			if( response == null )	response = "Key = ";
+		} else if ("list".equalsIgnoreCase(commandDecoded[0])) {
 			response = "";
 			for (String key : store.list()) {
 				System.out.println("val: "+key);
 				response = response + key + " ";	
 			}
-		} else if ("del".equals(commandDecoded[0])) {
+		} else if ("del".equalsIgnoreCase(commandDecoded[0])) {
 			store.del(commandDecoded[1]);
                         response = "OK";
 		}	
