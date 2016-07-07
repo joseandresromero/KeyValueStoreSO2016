@@ -11,7 +11,8 @@ public class ProgramaCliente {
 	String ip = args[0];
 	int puerto = Integer.parseInt(args[1]);	
 
-        LibreriaCliente conexion = new LibreriaCliente( ip, puerto );
-        System.out.println("Prueba");
+        LibreriaCliente lc = new LibreriaCliente( ip, puerto );
+        
+	lc.leerComando();
     }
 }
