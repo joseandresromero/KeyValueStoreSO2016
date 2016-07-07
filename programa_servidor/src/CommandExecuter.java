@@ -26,6 +26,7 @@ public class CommandExecuter {
 		} else if ("get".equals(commandDecoded[0])) {
 			System.out.println("El valor es: " + store.get(commandDecoded[1]));
 			response = store.get(commandDecoded[1]);
+			if( response == null )	response = "Key no existe";
 		} else if ("list".equals(commandDecoded[0])) {
 			response = "";
 			for (String key : store.list()) {

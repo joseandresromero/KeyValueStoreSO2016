@@ -27,9 +27,9 @@ public class LibreriaCliente {
             is = new DataInputStream(cliente.getInputStream());	     
 
         } catch (UnknownHostException excepcion) {
-            System.err.println("El servidor no está levantado");
+            System.err.println("ERROR: El servidor no está levantado");
         } catch (IOException e) {
-            System.err.println("Error: " + e );
+            System.err.println("ERROR: " + e );
         }
  
     }
@@ -43,13 +43,19 @@ public class LibreriaCliente {
 		while (responseLine != null) {
 		    
 		    String userInput = user.readLine();
-		    os.println(userInput);
-	  	    responseLine = is.readLine();
-                    System.out.println("Server: " + responseLine);
-                    
-		    if (responseLine.toUpperCase().indexOf("OK") != -1) {
+		    
+		    if ( userInput.equalsIgnoreCase("exit") ){
 			break;
-                    }
+                    } else if ( validarEntrada(userInput) ){
+		    
+		    	os.println(userInput);
+	  	    	responseLine = is.readLine();
+                    	System.out.println("Server: " + responseLine);
+                    
+		    }else if ( userInput.equalsIgnoreCase("help") )
+		    	ayuda();
+		    else
+			System.out.println("ERROR: Comando invalido.");	    
                 }
 		// clean up:
 		// close the output stream
@@ -59,14 +65,67 @@ public class LibreriaCliente {
                 is.close();
                 cliente.close(); 
 	    }catch(UnknownHostException e) {
-                System.err.println("Trying to connect to unknown host: " + e);
+                System.err.println("ERROR: Trying to connect to unknown host " + e);
             } catch (IOException e) {
-                System.err.println("IOException:  " + e);
+                System.err.println("ERROR: IOException - " + e);
             }
 	}
 
     }
 
+    public boolean validarEntrada(String command) {
+	
+	String metodo = null;
+	String parametro1 = null;
+	String parametro2 = null;
+
+	int indDelimitMet = command.indexOf(' ');
+
+	if (indDelimitMet == -1) {
+	    metodo = command;
+	    //System.err.println(metodo);
+	    switch(metodo){
+		case "list": return true;
+		    //break;
+		case "exit": return false;
+		    //break;
+		case "help": return false;
+		    //break;
+	    }	   
+
+	} else if (indDelimitMet != -1)  {
+	    metodo = command.substring(0, indDelimitMet);
+	    //System.err.println(metodo);
+	    switch(metodo){
+		case "get": return true;
+		    //break;
+		case "set": return true;
+		    //break;
+		case "del": return true;
+		    //break;
+	    }
+	}
+	return false;
+    }
+
+    
+    public void ayuda(){
+	System.err.println("get key \n* Retorna el valor asociado a dicha clave.");
+	System.err.println("set key value \n* Almacena (en memoria) la clave, con el valor "+
+				"asociado. El valor puede contener cualquier caracter, incluso "+
+				"caracteres especiales, tabs y espaciones en blanco.");
+	System.err.println("del key \n* Elimina la clave, con su valor asociado.");
+	System.err.println("list \n* Retorna la lista de todas las claves almacenadas."+
+				" NO retorna los valores asociados a dichas claves.");
+	System.err.println("exit \n* Termina la conexión con el servidor y posteriormente, "+
+				"termina ejecución del programa cliente.");
+	System.err.println("help \n* Muestra la lista de los comandos soportados, incluyendo "+
+				"una breve explicación de los mismos.");
+    }
+
+}
+
+/*
     public void ejecutarComando(Comando comando) {
 
         try {
@@ -89,28 +148,5 @@ public class LibreriaCliente {
 
         //return null;
     }
+*/    
 
-    public void validaCommand(String command) {
-	
-	String metodo = null;
-	String parametro1 = null;
-	String parametro2 = null;
-
-	int indiceDelimitadorMetodo = command.indexOf(' ');
-
-	if (indiceDelimitadorMetodo == -1) {
-	    metodo = command;
-	} else {
-	    metodo = command.substring(0, indiceDelimitadorMetodo);
-
-	    String comandoRestante = command.substring(indiceDelimitadorMetodo + 1);
-
-	    int indiceDelimitadorParametros = comandoRestante.indexOf(' ');
-
-	    if (indiceDelimitadorParametros == -1) {
-		parametro1 = comandoRestante;
-	    }
-	}
-    }
-
-}
