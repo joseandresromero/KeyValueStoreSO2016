@@ -30,22 +30,20 @@ public class ClientWorker implements Runnable {
     DataInputStream is;
     PrintStream os;
 
-//    while(true){
       try{
 	is = new DataInputStream(cliente.getInputStream());
         os = new PrintStream(cliente.getOutputStream());
 	while (true) {
-//      is = new DataInputStream(cliente.getInputStream());
-//        os = new PrintStream(cliente.getOutputStream());
 	        line = is.readLine();
 
-//		if (line != null) {
+		if (line == null || (line != null && line.toUpperCase().equals("EXIT"))) {
+			break;
+		} else {
 	        	System.out.println("Linea recibida del cliente: " + line);
 			String response = CommandExecuter.executeCommand(line, store);
-//			String response = CommandExecuter.test(line);
 			//Send data back to client
 		        os.println(response);
-//		}
+		}
 	}
        } catch (IOException e) {
         System.out.println("Read failed");
@@ -54,6 +52,6 @@ public class ClientWorker implements Runnable {
         System.out.println("Execp >>>>>> " + e);
         System.exit(-1);
        }
-//    }
+	System.out.println("Task terminada");
   }
 }
