@@ -2,6 +2,7 @@ package libreria_cliente;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
  
 public class LibreriaCliente {
 
@@ -50,7 +51,10 @@ public class LibreriaCliente {
 		    
 		    	os.println(userInput);
 	  	    	responseLine = is.readLine();
-                    	System.out.println("Server: " + responseLine);
+			if (  userInput.equalsIgnoreCase("list")  )
+                    	    listar(responseLine);
+			else    
+			    System.out.println("Server: " + responseLine);
                     
 		    }else if ( userInput.equalsIgnoreCase("help") )
 		    	ayuda();
@@ -123,8 +127,16 @@ public class LibreriaCliente {
 				"una breve explicación de los mismos.");
     }
 
+    
+    public void listar( String lista ){
+    	
+	StringTokenizer stTexto = new StringTokenizer(lista);
+	
+	while( stTexto.hasMoreTokens() ){
+            System.out.println("Server: " + stTexto.nextToken().trim());
+    	}
+    }
 }
-
 /*
     public void ejecutarComando(Comando comando) {
 

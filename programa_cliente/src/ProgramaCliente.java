@@ -14,5 +14,7 @@ public class ProgramaCliente {
         LibreriaCliente lc = new LibreriaCliente( ip, puerto );
         
 	lc.leerComando();
+
+	
     }
 }
